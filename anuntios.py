@@ -1,12 +1,13 @@
 from selenium import webdriver
 from PIL import Image
-from selenium.common.exceptions import (NoSuchElementException,
-                                        NoAlertPresentException)
+#from selenium.common.exceptions import (NoSuchElementException,
+#                                        NoAlertPresentException)
 import unittest
 from easygui import enterbox
 import re
 from random import randrange
 import time
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
 
 class Anuntios(unittest.TestCase):
@@ -53,37 +54,14 @@ class Anuntios(unittest.TestCase):
             time.sleep(61 + randrange(3))
             driver.find_element_by_link_text(
                 "Pulse aqui para generar sus BonoMatics").click()
+            #try:
             driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
-                              driver.current_url))
+                       driver.current_url))
+            #except UnexpectedAlertPresentException:
+            #    pass
             time.sleep(1)
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
-
-    def is_element_present(self, how, what):
-        try:
-            self.driver.find_element(by=how, value=what)
-        except NoSuchElementException:
-            return False
-        return True
-
-    def is_alert_present(self):
-        try:
-            self.driver.switch_to_alert()
-        except NoAlertPresentException:
-            return False
-        return True
-
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.driver.switch_to_alert()
-            alert_text = alert.text
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert_text
-        finally:
-            self.accept_next_alert = True
 
     def tearDown(self):
         self.driver.quit()
