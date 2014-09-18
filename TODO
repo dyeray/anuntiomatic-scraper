@@ -1,0 +1,6 @@
+-Add recovery from errors
+-BUG: Javascript exception leaving page
+-Clean code (user/password, stop using testcase, refactor)
+-Replace fixed waits with conditional waits
+-Add captcha recognition - pytesser / pytesseract / python-tesseract
+-Hide firefox window

@@ -1,13 +1,12 @@
 from selenium import webdriver
 from PIL import Image
-#from selenium.webdriver.common.by import By
-#from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import (NoSuchElementException,
                                         NoAlertPresentException)
-import unittest  # , time, re
+import unittest
 from easygui import enterbox
-import urllib2
+import re
+from random import randrange
+import time
 
 
 class Anuntios(unittest.TestCase):
@@ -19,40 +18,46 @@ class Anuntios(unittest.TestCase):
         self.accept_next_alert = True
 
     def test_anuntios(self):
+
+        # Login
         driver = self.driver
-        driver.get(self.base_url + "/")
+        driver.get(self.base_url)
         driver.find_element_by_id("username").clear()
         driver.find_element_by_id("username").send_keys("Juanitovalderrama")
         driver.find_element_by_id("password").clear()
         driver.find_element_by_id("password").send_keys("njd#HW73p2")
         driver.find_element_by_css_selector("button.btn.btn-primary").click()
-        driver.find_element_by_xpath(
-            "//div[2]/div/div/div/ul/li[16]/a/span").click()
-        captcha = driver.find_element_by_xpath("//img[starts-with(@src, 'captcha.php')]")
-        location = captcha.location
-        size = captcha.size
-        driver.save_screenshot('img.png')
-        img = Image.open('img.png')
-        left = location['x']
-        top = location['y']
-        right = location['x'] + size['width']
-        bottom = location['y'] + size['height']
-        img = img.crop((left, top, right, bottom))
-        img.save('img.png')
-        import pdb; pdb.set_trace()
-        #url = 'http://backoffice.anuntiomatic.com/captcha.php?cod=1'
-        #f = urllib2.urlopen(url)
-        #with open("img.png", "wb") as code:
-        #    code.write(f.read())
-        #reply = enterbox(image="img.png")
-        driver.find_element_by_id("respuesta").clear()
-        driver.find_element_by_id("respuesta").send_keys("99611")
-        driver.find_element_by_css_selector("button.btn.btn-primary").click()
-        driver.find_element_by_link_text("http://pacsdelpenedes.anuntiomatic.es/ad/view/servicios/241815688/calculadora-solar--oro-en-teletienda-anuntiomatic").click()
-        driver.find_element_by_link_text(
-            "Pulse aqui para generar sus BonoMatics").click()
-        driver.find_element_by_css_selector(
-            "div[alt=\"Close Advertising\"]").click()
+        while True:
+            time.sleep(2)
+            driver.get('http://backoffice.anuntiomatic.com/publicar.php?op=1')
+            captcha = driver.find_element_by_xpath(
+                "//img[starts-with(@src, 'captcha.php')]")
+            location = captcha.location
+            size = captcha.size
+            driver.save_screenshot('img.png')
+            img = Image.open('img.png')
+            left = location['x']
+            top = location['y']
+            right = location['x'] + size['width']
+            bottom = location['y'] + size['height']
+            img = img.crop((left, top, right, bottom))
+            img.save('img.png')
+            reply = enterbox(image="img.png")
+            driver.find_element_by_id("respuesta").clear()
+            driver.find_element_by_id("respuesta").send_keys(reply)
+            driver.find_element_by_css_selector(
+                "button.btn.btn-primary").click()
+            driver.find_element_by_xpath(
+                "//a[starts-with(@href, 'veranuncio.php')]").click()
+            driver.switch_to_window(driver.window_handles[1])
+            time.sleep(61 + randrange(3))
+            driver.find_element_by_link_text(
+                "Pulse aqui para generar sus BonoMatics").click()
+            driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
+                              driver.current_url))
+            time.sleep(1)
+            driver.close()
+            driver.switch_to_window(driver.window_handles[0])
 
     def is_element_present(self, how, what):
         try:
