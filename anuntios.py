@@ -7,7 +7,7 @@ from easygui import enterbox
 import re
 from random import randrange
 import time
-from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import NoAlertPresentException
 
 
 class Anuntios(unittest.TestCase):
@@ -54,10 +54,12 @@ class Anuntios(unittest.TestCase):
             time.sleep(61 + randrange(3))
             driver.find_element_by_link_text(
                 "Pulse aqui para generar sus BonoMatics").click()
-            #try:
             driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
                        driver.current_url))
-            #except UnexpectedAlertPresentException:
+            #try:
+            #    alert = driver.switch_to_alert()
+            #    alert.dismiss()
+            #except NoAlertPresentException:
             #    pass
             time.sleep(1)
             driver.close()
