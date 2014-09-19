@@ -56,11 +56,12 @@ class Anuntios(unittest.TestCase):
                 "Pulse aqui para generar sus BonoMatics").click()
             driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
                        driver.current_url))
-            #try:
-            #    alert = driver.switch_to_alert()
-            #    alert.dismiss()
-            #except NoAlertPresentException:
-            #    pass
+            try:
+                alert = driver.switch_to_alert()
+                alert.accept()
+            except NoAlertPresentException:
+                print("There is no alert")
+                pass
             time.sleep(1)
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
