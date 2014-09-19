@@ -1,3 +1,5 @@
+# -*- encoding: UTF-8 -*-
+
 from selenium import webdriver
 from PIL import Image
 #from selenium.common.exceptions import (NoSuchElementException,
