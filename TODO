@@ -1,4 +1,3 @@
 -Clean code (user/password, better exit handling)
 -Replace fixed waits with conditional waits
--Add captcha recognition - pytesser / pytesseract / python-tesseract
 -Hide firefox window

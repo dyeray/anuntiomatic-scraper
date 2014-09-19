@@ -5,11 +5,12 @@ from PIL import Image
 #from selenium.common.exceptions import (NoSuchElementException,
 #                                        NoAlertPresentException)
 #import unittest
-from easygui import enterbox
+#from easygui import enterbox
 import re
 from random import randrange
 import time
 from selenium.common.exceptions import NoAlertPresentException
+from captcha import AnuntiomaticCaptcha
 
 
 class Anuntios:
@@ -31,7 +32,7 @@ class Anuntios:
         # Init selenium
         self.driver = webdriver.Firefox()
         driver = self.driver
-        self.driver.implicitly_wait(20)
+        self.driver.implicitly_wait(10)
         self.base_url = "http://backoffice.anuntiomatic.com/"
 
         # Login
@@ -55,10 +56,10 @@ class Anuntios:
             right = location['x'] + size['width']
             bottom = location['y'] + size['height']
             img = img.crop((left, top, right, bottom))
-            img.save('img.png')
-            reply = enterbox(image="img.png")
+            captcha_text = AnuntiomaticCaptcha(img).get_text()
+            #captcha_text = enterbox(image="img.png")
             driver.find_element_by_id("respuesta").clear()
-            driver.find_element_by_id("respuesta").send_keys(reply)
+            driver.find_element_by_id("respuesta").send_keys(captcha_text)
             driver.find_element_by_css_selector(
                 "button.btn.btn-primary").click()
             driver.find_element_by_xpath(
