@@ -2,7 +2,7 @@ from selenium import webdriver
 from PIL import Image
 #from selenium.common.exceptions import (NoSuchElementException,
 #                                        NoAlertPresentException)
-import unittest
+#import unittest
 from easygui import enterbox
 import re
 from random import randrange
@@ -10,18 +10,29 @@ import time
 from selenium.common.exceptions import NoAlertPresentException
 
 
-class Anuntios(unittest.TestCase):
-    def setUp(self):
-        self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
-        self.base_url = "http://backoffice.anuntiomatic.com/"
-        self.verificationErrors = []
-        self.accept_next_alert = True
+class Anuntios:
 
-    def test_anuntios(self):
+    def run(self):
+        while True:
+            try:
+                self._make_ads()
+            except KeyboardInterrupt:
+                self.driver.quit()
+                exit()
+            except Exception as e:
+                print e
+                self.driver.quit()
+                self._make_ads()
+
+    def _make_ads(self):
+
+        # Init selenium
+        self.driver = webdriver.Firefox()
+        driver = self.driver
+        self.driver.implicitly_wait(20)
+        self.base_url = "http://backoffice.anuntiomatic.com/"
 
         # Login
-        driver = self.driver
         driver.get(self.base_url)
         driver.find_element_by_id("username").clear()
         driver.find_element_by_id("username").send_keys("Juanitovalderrama")
@@ -60,15 +71,10 @@ class Anuntios(unittest.TestCase):
                 alert = driver.switch_to_alert()
                 alert.accept()
             except NoAlertPresentException:
-                print("There is no alert")
                 pass
             time.sleep(1)
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
 
-    def tearDown(self):
-        self.driver.quit()
-        self.assertEqual([], self.verificationErrors)
-
 if __name__ == "__main__":
-    unittest.main()
+    Anuntios().run()
