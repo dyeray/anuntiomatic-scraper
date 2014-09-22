@@ -5,7 +5,8 @@ from PIL import Image
 import re
 from random import randrange
 import time
-from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import (NoAlertPresentException,
+                                        NoSuchElementException)
 #from easygui import enterbox
 from captcha import AnuntiomaticCaptcha
 import json
@@ -29,8 +30,7 @@ class Anuntios:
             except KeyboardInterrupt:
                 self.driver.quit()
                 exit()
-            except Exception as e:
-                print e
+            except:
                 self.driver.quit()
                 self._make_ads()
 
@@ -73,10 +73,13 @@ class Anuntios:
                 "//a[starts-with(@href, 'veranuncio.php')]").click()
             driver.switch_to_window(driver.window_handles[1])
             time.sleep(61 + randrange(3))
-            driver.find_element_by_link_text(
-                "Pulse aqui para generar sus BonoMatics").click()
-            driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
-                       driver.current_url))
+            try:
+                driver.find_element_by_link_text(
+                    "Pulse aqui para generar sus BonoMatics").click()
+                driver.get(re.sub(r'adf\.ly/[0-9]*/(banner/)?', "",
+                           driver.current_url))
+            except NoSuchElementException:
+                pass
             try:
                 alert = driver.switch_to_alert()
                 alert.accept()
