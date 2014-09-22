@@ -32,7 +32,6 @@ class Anuntios:
                 exit()
             except:
                 self.driver.quit()
-                self._make_ads()
 
     def _make_ads(self):
 
