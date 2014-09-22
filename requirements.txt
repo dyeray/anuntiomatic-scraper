@@ -1,3 +1,4 @@
 easygui
 selenium
 pytesseract
+pyvirtualdisplay

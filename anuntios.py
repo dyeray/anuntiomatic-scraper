@@ -2,18 +2,25 @@
 
 from selenium import webdriver
 from PIL import Image
-#from selenium.common.exceptions import (NoSuchElementException,
-#                                        NoAlertPresentException)
-#import unittest
-#from easygui import enterbox
 import re
 from random import randrange
 import time
 from selenium.common.exceptions import NoAlertPresentException
+#from easygui import enterbox
 from captcha import AnuntiomaticCaptcha
+import json
+from pyvirtualdisplay import Display
 
 
 class Anuntios:
+
+    def __init__(self):
+        settings = json.load(open('settings.cfg'))
+        self.username = settings['username']
+        self.password = settings['password']
+        display = Display(visible=0, size=(1280, 1024))
+        display.start()
+        self.display = display
 
     def run(self):
         while True:
@@ -38,9 +45,9 @@ class Anuntios:
         # Login
         driver.get(self.base_url)
         driver.find_element_by_id("username").clear()
-        driver.find_element_by_id("username").send_keys("Juanitovalderrama")
+        driver.find_element_by_id("username").send_keys(self.username)
         driver.find_element_by_id("password").clear()
-        driver.find_element_by_id("password").send_keys("njd#HW73p2")
+        driver.find_element_by_id("password").send_keys(self.password)
         driver.find_element_by_css_selector("button.btn.btn-primary").click()
         while True:
             time.sleep(2)
@@ -56,8 +63,8 @@ class Anuntios:
             right = location['x'] + size['width']
             bottom = location['y'] + size['height']
             img = img.crop((left, top, right, bottom))
-            captcha_text = AnuntiomaticCaptcha(img).get_text()
             #captcha_text = enterbox(image="img.png")
+            captcha_text = AnuntiomaticCaptcha(img).get_text()
             driver.find_element_by_id("respuesta").clear()
             driver.find_element_by_id("respuesta").send_keys(captcha_text)
             driver.find_element_by_css_selector(

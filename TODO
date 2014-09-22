@@ -1,3 +1,6 @@
--Clean code (user/password, better exit handling)
+-Clean code (better exit handling)
 -Replace fixed waits with conditional waits
--Hide firefox window
+-Use functionality depending on libraries available/settings (captcha solver/popup, etc.)
+-Allow to input username from terminal
+-Show a help message if a library is needed
+-Logging option (images on error, text on terminal)
