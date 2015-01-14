@@ -1,0 +1,1 @@
+This scripts watches advertising for you on Anuntiomatic to get points you can exchange for money. This has been done on my spare time to practise selenium. This script probably goes against Anuntiomatic Terms and Conditions. Use it on your own responsibility.
